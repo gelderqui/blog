@@ -9,7 +9,14 @@ data:{
   stock:"",
   total:0,       
   count:0,
- },    
+  elementosporpagina:5,
+  datosPaginados:[],
+  paginaActual:1,
+  gelder:"inicial"
+ },
+  // mounted(){
+  // this.getDataPagina(1);
+  // },    
 methods:{  
 //BOTONES 
 //Para enviar datos con axios se pone antes de function async que significa asincrono       
@@ -102,13 +109,15 @@ methods:{
     //PROCEDIMIENTOS para el CRUD     
     listarProducts:function(){
         axios.post(url, {opcion:4}).then(response =>{
-           this.products = response.data;       
+           this.products = response.data;  
+           this.getDataPagina(1);      
         });
     },    
     //Procedimiento CREAR.
     altaProduct:function(){
         axios.post(url, {opcion:1, nombre:this.nombre, descripcion:this.descripcion,stock:this.stock }).then(response =>{
           this.listarProducts();   
+          this.getDataPagina(1);  
         });        
          this.nombre = "",
          this.descripcion = "",
@@ -117,18 +126,51 @@ methods:{
     //Procedimiento EDITAR.
     editarProduct:function(id,nombre,descripcion,stock){       
        axios.post(url, {opcion:2, id:id, nombre:nombre, descripcion: descripcion, stock:stock }).then(response =>{           
-           this.listarProducts();           
+        this.listarProducts(); 
+        this.getDataPagina(1);         
         });                              
     },    
     //Procedimiento BORRAR.
     borrarProduct:function(id){
         axios.post(url, {opcion:3, id:id}).then(response =>{           
             this.listarProducts();
+            this.getDataPagina(1);  
             });
-    }             
+    },
+    //Calculo de paginacion 
+      totalPaginas(){
+        return Math.ceil(this.products.length/this.elementosporpagina)
+      },
+      getDataPagina(noPagina){
+        // if(noPagina==100){noPagina;this.gelder=noPagina+"-gelder"}
+        // else {this.gelder="else"}
+        this.gelder=noPagina;
+        this.paginaActual=this.gelder;
+        this.datosPaginados = [];
+        let ini = (noPagina * this.elementosporpagina)-this.elementosporpagina;
+        let fin = (noPagina * this.elementosporpagina);
+
+        //Slice es un metodo de los array nos devuelve un nuevo array desde el numero de posicion que le indiquemos con una posicion inicial y una posicion final
+        this.datosPaginados=this.products.slice(ini,fin);
+        
+      },
+      getPreviousPage(){
+        if(this.paginaActual>1){
+          this.paginaActual--;
+        }
+        this.getDataPagina(this.paginaActual);
+      },
+      getNextPage(){
+        if(this.paginaActual<this.totalPaginas()){
+          this.paginaActual++;
+        }
+        this.getDataPagina(this.paginaActual);
+      }
+    //Fin Paginacion            
 },      
 created: function(){            
-   this.listarProducts();            
+    this.listarProducts();  
+             
 },    
 computed:{
     totalStock(){
@@ -144,6 +186,6 @@ computed:{
           this.count = this.count + 1;
       }
       return this.count;   
-  }
-}    
+    },
+}
 });

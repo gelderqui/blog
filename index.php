@@ -31,7 +31,8 @@
                     </div>  
                 </div>                
                 <div class="row mt-5">
-                    <div class="col-lg-12">                    
+                    <div class="col-lg-12"> 
+                      {{gelder}} 
                         <table class="table table-striped">
                             <thead>
                                 <tr class="bg-primary text-light">
@@ -43,15 +44,16 @@
                                 </tr>    
                             </thead>
                             <tbody>
-                                <tr v-for="(product,indice) of products">                                
+                                <tr v-for="(product,indice) of datosPaginados">                                
                                     <td>{{product.id}}</td>                                
                                     <td>{{product.nombre}}</td>
                                     <td>{{product.descripcion}}</td>
-                                    <td>
+                                    <td>{{product.stock}}</td>
+                                    <!-- <td>
                                         <div class="col-md-8">
                                         <input type="number" v-model.number="product.stock" class="form-control text-right" disabled>      
                                         </div>    
-                                    </td>
+                                    </td> -->
                                     <td>
                                     <div class="btn-group" role="group">
                                         <button class="btn btn-secondary" title="Editar" @click="btnEditar(product.id, product.nombre, product.descripcion, product.stock)"><i class="fas fa-pencil-alt"></i></button>    
@@ -60,7 +62,14 @@
                                     </td>
                                 </tr>    
                             </tbody>
-                        </table>                    
+                        </table>      
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination">
+                                <li class="page-item" v-on:click="getPreviousPage()"><a class="page-link" href="#">Previous</a></li>
+                                <li v-for="pagina in totalPaginas()" v-on:click="getDataPagina(pagina)" class="page-item"><a class="page-link" href="#">{{pagina}}</a></li>
+                                <li class="page-item" v-on:click="getNextPage()"><a class="page-link" href="#">Next</a></li>
+                            </ul>
+                        </nav>              
                     </div>
                 </div>
             </div>        
