@@ -2,9 +2,12 @@
     class Conexion{
         public static function Conectar(){
             define('servidor', 'localhost');
-            define('nombre_bd', 'u200878855_crudphpvue');
-            define('usuario', 'u200878855_gelder5');
-            define('password', 'h3T*i!12Wo?');	
+            // define('nombre_bd', 'u200878855_crudphpvue');
+            // define('usuario', 'u200878855_gelder5');
+            // define('password', 'h3T*i!12Wo?');	
+            define('nombre_bd', 'crudphpvue');
+            define('usuario', 'root');
+            define('password', '');	
             $opciones = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');			
             try{
                 $conexion = new PDO("mysql:host=".servidor."; dbname=".nombre_bd, usuario, password, $opciones);
